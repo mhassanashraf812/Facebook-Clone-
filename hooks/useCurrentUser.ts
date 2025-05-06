@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR from "swr"; 
 import fetcher from "@utils/fetcher";
 
 const useCurrentUser = () => {

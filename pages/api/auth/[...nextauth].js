@@ -16,7 +16,7 @@ export const authOptions = {
         },
         password: {
           label: "Password",
-          type: "password", // Typo here ("passord" should be "password")
+          type: "password", 
         },
       },
       async authorize(credentials) {
