@@ -1,5 +1,8 @@
 import { Navbar, SidebarLeft, SidebarRight } from "@components";
 import "@styles/globals.css";
+import ChatBotWidget from "@/components/ChatBotWidget";
+
+
 import { Toaster } from "react-hot-toast";
 export const metadata = {
   title: "Facebook",
@@ -21,6 +24,7 @@ export default function RootLayout({
             {children}
             <SidebarRight />
           </div>
+            <ChatBotWidget /> 
           <Toaster />
         </div>
       </body>
