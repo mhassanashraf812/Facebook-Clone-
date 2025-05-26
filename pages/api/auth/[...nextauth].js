@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import User from "@models/User";
-import { connectToDB } from "@utils/db";
+import NextAuth from "next-auth"
+import Credentials from "next-auth/providers/credentials"
+import { compare } from "bcrypt"
+import User from "@models/User"
+import { connectToDB } from "@utils/db"
 
 export const authOptions = {
   providers: [
@@ -16,32 +16,33 @@ export const authOptions = {
         },
         password: {
           label: "Password",
-          type: "password", 
+          type: "password",
         },
       },
       async authorize(credentials) {
-        await connectToDB();
+        await connectToDB()
         if (!credentials.email || !credentials.password) {
-          throw new Error("Email and password required");
+          throw new Error("Email and password required")
         }
 
-        const user = await User.findOne({ email: credentials.email }).select(
-          "+password"
-        );
+        const user = await User.findOne({ email: credentials.email }).select("+password")
 
         if (!user) {
-          throw new Error("Email does not exist");
+          throw new Error("Email does not exist")
         }
-        const isCorrectPassword = await compare(
-          credentials.password,
-          user.password
-        );
+
+        // Check if user is verified
+        if (!user.isVerified) {
+          throw new Error("Please verify your email before logging in")
+        }
+
+        const isCorrectPassword = await compare(credentials.password, user.password)
 
         if (!isCorrectPassword) {
-          throw new Error("Incorrect password");
+          throw new Error("Incorrect password")
         }
 
-        return user;
+        return user
       },
     }),
   ],
@@ -54,6 +55,6 @@ export const authOptions = {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+}
 
-export default NextAuth(authOptions);
+export default NextAuth(authOptions)
