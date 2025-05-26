@@ -69,11 +69,11 @@
 // };
 
 // export default handler;import type { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { connectToDB } from "@utils/db"
 import User from "@models/User"
 import crypto from "crypto"
 import sgMail from "@sendgrid/mail"
-import { NextApiRequest, NextApiResponse } from "@node_modules/next"
 
 // Initialize SendGrid
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
@@ -103,7 +103,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const emailToken = crypto.randomBytes(32).toString("hex")
     await User.findByIdAndUpdate(user._id, { emailToken })
 
-    const verificationUrl = `${process.env.NEXTAUTH_URL}/verify/${user._id}?token=${emailToken}`
+    // Get the base URL with fallback
+    const baseUrl =
+      process.env.NEXTAUTH_URL || process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : req.headers.host
+          ? `https://${req.headers.host}`
+          : "http://localhost:3000"
+
+    const verificationUrl = `${baseUrl}/verify/${user._id}?token=${emailToken}`
+
+    console.log("🔗 Generated verification URL:", verificationUrl) // Debug log
 
     // SendGrid email configuration
     const msg = {

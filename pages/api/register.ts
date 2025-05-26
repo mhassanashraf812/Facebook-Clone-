@@ -102,7 +102,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       isVerified: false,
     })
 
-    const verificationUrl = `${process.env.NEXTAUTH_URL}/verify/${newUser._id}?token=${emailToken}`
+    // Get the base URL with fallback
+    const baseUrl =
+      process.env.NEXTAUTH_URL || process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : req.headers.host
+          ? `https://${req.headers.host}`
+          : "http://localhost:3000"
+
+    const verificationUrl = `${baseUrl}/verify/${newUser._id}?token=${emailToken}`
+
+    console.log("🔗 Generated verification URL:", verificationUrl) // Debug log
 
     // SendGrid email configuration
     const msg = {
