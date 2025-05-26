@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@sendgrid/mail": "^8.1.5",
     "@types/cookie": "^0.5.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "20.4.1",
