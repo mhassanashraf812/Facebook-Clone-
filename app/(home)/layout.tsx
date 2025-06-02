@@ -1,11 +1,13 @@
 import { Navbar, SidebarLeft, SidebarRight } from "@components";
 import "@styles/globals.css";
-import dynamic from 'next/dynamic'; // Add this import
+import dynamic from 'next/dynamic';
+import ClientOnly from "@/components/ClientOnly";
+import SessionExpiryDialogWrapper from "@/components/SessionExpiryDialogWrapper";
+import { Toaster } from "react-hot-toast";
 
 const ChatBotWidget = dynamic(() => import('@/components/ChatBotWidget'), {
-  ssr: false, // Disable server-side rendering for this component
+  ssr: false,
 });
-import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Facebook",
@@ -20,15 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#e9ebee] relative">
-        <div>
-          <Navbar />
-          <div className="flex justify-center relative">
-            <SidebarLeft />
-            {children}
-            <SidebarRight />
-          </div>
-          <ChatBotWidget /> 
-          <Toaster />
+        <Navbar />
+        <div className="flex justify-center relative">
+          <SidebarLeft />
+          {children}
+          <ClientOnly>
+            <SessionExpiryDialogWrapper />
+            <ChatBotWidget />
+            <Toaster />
+          </ClientOnly>
+          <SidebarRight />
         </div>
       </body>
     </html>
