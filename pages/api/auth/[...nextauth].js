@@ -30,8 +30,6 @@ export const authOptions = {
         if (!user) {
           throw new Error("Email does not exist")
         }
-
-        // Check if user is verified
         if (!user.isVerified) {
           throw new Error("Please verify your email before logging in")
         }

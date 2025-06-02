@@ -27,7 +27,7 @@ export default function SessionExpiryDialog() {
         <p className="mb-6">Your session has expired. Please log in again.</p>
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => (window.location.href = "/auth")}
+          onClick={() => (window.location.href = "/login")}
         >
           Go to Login
         </button>
